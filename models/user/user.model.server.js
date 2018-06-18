@@ -18,11 +18,16 @@ function findAllUsers() {
   return userModel.find();
 }
 
+function updateUser(userDetails){
+    return userModel.findOneAndUpdate({username: userDetails.username}, userDetails);
+}
+
 var api = {
   createUser: createUser,
   findAllUsers: findAllUsers,
   findUserById: findUserById,
-  findUserByCredentials: findUserByCredentials
+  findUserByCredentials: findUserByCredentials,
+    updateUser:updateUser
 };
 
 module.exports = api;

@@ -5,6 +5,7 @@ module.exports = function (app) {
     app.get('/api/profile', profile);
     app.post('/api/logout', logout);
     app.post('/api/login', login);
+    app.put('/api/updateUser', updateUser);
 
     var userModel = require('../models/user/user.model.server');
 
@@ -68,5 +69,11 @@ module.exports = function (app) {
             .then(function (users) {
                 res.send(users);
             })
+    }
+
+    function updateUser(req,res) {
+        var userDetails = req.body;
+        userModel.updateUser(userDetails)
+            .then(user => res.send(user));
     }
 }
