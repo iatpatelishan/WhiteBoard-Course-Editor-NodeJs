@@ -16,7 +16,7 @@ module.exports = function (app) {
                 if(!user){
                     res.status(401).json({
                         "success": false,
-                        "message" : "User Not Found"
+                        "message" : "User Not Found With Given Credentials"
                     });
                 } else {
                     req.session['currentUser'] = user;
@@ -44,11 +44,23 @@ module.exports = function (app) {
 
     function createUser(req, res) {
         var user = req.body;
-        userModel.createUser(user)
-            .then(function (user) {
-                req.session['currentUser'] = user;
-                res.send(user);
-            })
+
+        userModel
+            .findUserByCredentials({username:user.username})
+            .then(function (dbUser) {
+                if(!dbUser) {
+                    userModel.createUser(user)
+                        .then(function (newUser) {
+                            req.session['currentUser'] = newUser;
+                            res.send(newUser);
+                        })
+                } else {
+                    res.status(401).json({
+                        "success": false,
+                        "message" : "Username already exists"
+                    });
+                }
+            });
     }
 
     function findAllUsers(req, res) {

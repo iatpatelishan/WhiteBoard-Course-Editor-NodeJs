@@ -25,7 +25,8 @@ var session = require('express-session')
 app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'any string'
+    secret: 'any string',
+    cookie: { maxAge : 1800000 }
 }));
 
 
