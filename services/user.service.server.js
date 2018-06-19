@@ -14,10 +14,10 @@ module.exports = function (app) {
         userModel
             .findUserByCredentials(credentials)
             .then(function (user) {
-                if(!user){
+                if (!user) {
                     res.status(401).json({
                         "success": false,
-                        "message" : "User Not Found With Given Credentials"
+                        "message": "User Not Found With Given Credentials"
                     });
                 } else {
                     req.session['currentUser'] = user;
@@ -40,17 +40,35 @@ module.exports = function (app) {
     }
 
     function profile(req, res) {
-        userModel.findUserById(req.session['currentUser']['_id'])
-            .then((user)=> res.send(user));
+        if (req.session.currentUser) {
+            userModel.findUserById(req.session['currentUser']['_id'])
+                .then((user) => {
+                    if (user) {
+                        res.send(user)
+                    } else {
+                        res.status(401).json({
+                            "success": false,
+                            "message": "Not Logged In"
+                        });
+                    }
+                });
+        } else {
+            res.status(401).json({
+                "success": false,
+                "message": "Not Logged In"
+            });
+        }
+
+
     }
 
     function createUser(req, res) {
         var user = req.body;
 
         userModel
-            .findUserByCredentials({username:user.username})
+            .findUserByCredentials({username: user.username})
             .then(function (dbUser) {
-                if(!dbUser) {
+                if (!dbUser) {
                     userModel.createUser(user)
                         .then(function (newUser) {
                             req.session['currentUser'] = newUser;
@@ -59,7 +77,7 @@ module.exports = function (app) {
                 } else {
                     res.status(401).json({
                         "success": false,
-                        "message" : "Username already exists"
+                        "message": "Username already exists"
                     });
                 }
             });
@@ -72,7 +90,7 @@ module.exports = function (app) {
             })
     }
 
-    function updateUser(req,res) {
+    function updateUser(req, res) {
         var userDetails = req.body;
         userModel.updateUser(userDetails)
             .then(user => res.send(user));
