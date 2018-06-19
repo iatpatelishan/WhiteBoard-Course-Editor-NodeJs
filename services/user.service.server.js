@@ -40,7 +40,8 @@ module.exports = function (app) {
     }
 
     function profile(req, res) {
-        res.send(req.session['currentUser']);
+        userModel.findUserById(req.session['currentUser']['_id'])
+            .then((user)=> res.send(user));
     }
 
     function createUser(req, res) {
