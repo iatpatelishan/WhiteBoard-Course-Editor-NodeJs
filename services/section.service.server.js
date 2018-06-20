@@ -12,6 +12,9 @@ module.exports = function (app) {
     var enrollmentModel = require('../models/enrollment/enrollment.model.server');
 
     function findSectionsForStudent(req, res) {
+        if(!req.session){
+            res.json([]);
+        }
         var currentUser = req.session.currentUser;
         var studentId = currentUser._id;
         enrollmentModel

@@ -10,7 +10,7 @@ function enrollStudentInSection(enrollment) {
 }
 
 function unenrollStudentInSection(enrollment) {
-    return enrollmentModel.delete(enrollment);
+    return enrollmentModel.remove(enrollment);
 }
 
 function deleteSectionEnrollments(sectionId) {
