@@ -20,9 +20,16 @@ module.exports = function (app) {
         enrollmentModel
             .findSectionsForStudent(studentId)
             .then(function (enrollments) {
-                res.json(enrollments);
+                var e;
+                var sections = []
+                for(var i=0; i< enrollments.length; i++) {
+                    sections.push(enrollments[i].section);
+                }
+                res.json(sections);
             });
     }
+
+
 
     function enrollStudentInSection(req, res) {
         var sectionId = req.params.sectionId;
