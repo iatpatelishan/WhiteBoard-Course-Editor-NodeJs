@@ -10,11 +10,15 @@ function findSectionsForCourse(courseId) {
     return sectionModel.find({courseId: courseId});
 }
 
+function findSectionById(sectionId){
+    return sectionModel.findOne({_id: sectionId});
+}
+
 function decrementSectionSeats(sectionId) {
     return sectionModel.update({
         _id: sectionId
     }, {
-        $inc: {seats: -1}
+        $inc: {usedSeats: +1}
     });
 }
 
@@ -22,7 +26,7 @@ function incrementSectionSeats(sectionId) {
     return sectionModel.update({
         _id: sectionId
     }, {
-        $inc: {seats: +1}
+        $inc: {usedSeats: -1}
     });
 }
 
@@ -42,5 +46,6 @@ module.exports = {
     decrementSectionSeats: decrementSectionSeats,
     incrementSectionSeats: incrementSectionSeats,
     deleteSection: deleteSection,
-    updateSection: updateSection,
+    findSectionById: findSectionById,
+    updateSection: updateSection
 };
