@@ -2,11 +2,14 @@ module.exports = function (app) {
 
     app.post('/api/course/:courseId/section', createSection);
     app.get('/api/course/:courseId/section', findSectionsForCourse);
-    app.post('/api/student/:studentId/section/:sectionId', enrollStudentInSection);
-    app.delete('/api/student/:studentId/section/:sectionId', unenrollStudentInSection);
-    app.get('/api/student/section', findSectionsForStudent);
+    app.delete('/api/section/:sectionId', findSectionById);
     app.delete('/api/section/:sectionId', deleteSection);
     app.put('/api/section/:sectionId', updateSection);
+
+    app.post('/api/student/:studentId/section/:sectionId', enrollStudentInSection);
+    app.get('/api/student/:studentId/section', findSectionsForStudentById);
+    app.get('/api/student/section', findSectionsForStudent);
+    app.delete('/api/student/:studentId/section/:sectionId', unenrollStudentInSection);
 
     var sectionModel = require('../models/section/section.model.server');
     var enrollmentModel = require('../models/enrollment/enrollment.model.server');
@@ -28,6 +31,25 @@ module.exports = function (app) {
                 res.json(sections);
             });
     }
+
+    function findSectionsForStudentById(req, res) {
+        if(!req.session){
+            res.json([]);
+        }
+        var studentId = req.params.studentId;
+        enrollmentModel
+            .findSectionsForStudent(studentId)
+            .then(function (enrollments) {
+                var e;
+                var sections = []
+                for(var i=0; i< enrollments.length; i++) {
+                    sections.push(enrollments[i].section);
+                }
+                res.json(sections);
+            });
+    }
+
+
 
 
 
@@ -119,6 +141,12 @@ module.exports = function (app) {
         sectionModel.updateSection(sectionId, updatedSection).then(() => {
             res.json({"success": true});
         });
+    }
+
+    function findSectionById(req,res) {
+        var sectionId = req.params['sectionId'];
+        sectionModel.findSectionById(sectionId)
+            .then((section) => res.json(section));
     }
 
 };

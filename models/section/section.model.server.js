@@ -40,6 +40,10 @@ function updateSection(sectionId, updatedSection) {
     return sectionModel.update({_id: sectionId}, {$set: updatedSection});
 }
 
+function findSectionById(sectionId) {
+    return sectionModel.findOne({_id: sectionId});
+}
+
 module.exports = {
     createSection: createSection,
     findSectionsForCourse: findSectionsForCourse,
@@ -47,5 +51,6 @@ module.exports = {
     incrementSectionSeats: incrementSectionSeats,
     deleteSection: deleteSection,
     findSectionById: findSectionById,
-    updateSection: updateSection
+    updateSection: updateSection,
+    findSectionById: findSectionById
 };
