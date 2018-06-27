@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.get('/api/submission', findAllSubmissions);
     app.post('/api/submission', createSubmission);
     app.get('/api/form/:formId/submission', findSubmissionForFormId);
+    app.get('/api/submission/:submissionId', findSubmissionById);
 
     var submissionModel = require('../models/submission/submission.model.server');
 
@@ -31,10 +32,19 @@ module.exports = function (app) {
     function findSubmissionForFormId(req, res) {
         var id = req.params['formId'];
         submissionModel.findSubmissionsForForm(id)
-            .then(function (submissios) {
-                res.send(submissios);
+            .then(function (submissions) {
+                res.send(submissions);
             })
     }
+
+    function findSubmissionById(req, res) {
+        var id = req.params['submissionId'];
+        submissionModel.findSubmissionById(id)
+            .then(function (submission) {
+                res.send(submission);
+            })
+    }
+
 
 
 

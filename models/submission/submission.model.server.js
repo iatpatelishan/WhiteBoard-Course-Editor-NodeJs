@@ -21,9 +21,15 @@ function createSubmission(submission) {
     return submissionModel.create(submission);
 }
 
+function findSubmissionById(submissionId) {
+    return submissionModel.find({_id: submissionId});
+}
+
+
 module.exports = {
     findSubmissionsForForm: findSubmissionsForForm,
     findSubmissionsForUser: findSubmissionsForUser,
     createSubmission: createSubmission,
-    findAllSubmissions: findAllSubmissions
+    findAllSubmissions: findAllSubmissions,
+    findSubmissionById: findSubmissionById
 };
