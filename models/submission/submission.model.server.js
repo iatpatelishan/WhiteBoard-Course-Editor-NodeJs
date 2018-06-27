@@ -22,7 +22,7 @@ function createSubmission(submission) {
 }
 
 function findSubmissionById(submissionId) {
-    return submissionModel.find({_id: submissionId});
+    return submissionModel.findOne({_id: submissionId});
 }
 
 
